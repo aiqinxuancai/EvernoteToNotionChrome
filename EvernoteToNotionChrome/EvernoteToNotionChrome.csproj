@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+
+    <!-- 如果你的项目是 Exe，则设为 WinExe；如果是 WPF 类库，则删掉这一行 -->
+    <OutputType>WinExe</OutputType>
+    <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
+    <ApplicationIcon></ApplicationIcon>
+    <!-- 如果你的原有项目中有 App.manifest 文件，则在此加入 -->
+    <!-- <ApplicationManifest>Properties\App.manifest</ApplicationManifest> -->
+
+    <!-- 如果你的原有项目中有 App.ico 图标，则在此加入 -->
+    <!-- <ApplicationIcon>Properties\App.ico</ApplicationIcon> -->
+
+    <!-- 如果你的原有项目中有自定义的 Main 函数，则在此加入 -->
+    <!-- <StartupObject>Walterlv.Whitman.Program</StartupObject> -->
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CefSharp.Wpf">
+      <Version>86.0.241</Version>
+    </PackageReference>
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.7" />
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
+  </ItemGroup>
+</Project>

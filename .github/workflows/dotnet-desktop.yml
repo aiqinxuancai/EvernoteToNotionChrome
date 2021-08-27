@@ -1,0 +1,38 @@
+name: .NET Core Desktop
+
+on: 
+  push:
+    tags:
+    - '*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: Dotnet Build
+    
+    steps:
+      - name: Install 7Zip PowerShell Module
+        shell: powershell
+        run: Install-Module 7Zip4PowerShell -Force -Verbose
+      - uses: actions/checkout@v2
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+      - name: Clean
+        run: dotnet clean $env:GITHUB_WORKSPACE\EvernoteToNotionChrome.sln --configuration Release && dotnet nuget locals all --clear
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
+      - name: Publish
+        run:  dotnet publish -c Release -r win-x64
+      - name: Compress
+        run: powershell Compress-7Zip $env:GITHUB_WORKSPACE\EvernoteToNotionChrome\bin\Release\net5.0-windows\win-x64\publish -ArchiveFileName "EvernoteToNotionChrome.zip" -Format Zip
+      - name: Create a Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "EvernoteToNotionChrome.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
