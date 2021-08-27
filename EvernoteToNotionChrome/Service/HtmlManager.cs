@@ -73,7 +73,7 @@ namespace EvernoteToNotionChrome.Service
                 var result = UploadManager.UploadFile(fullFilePath).Result;
                 if (string.IsNullOrEmpty(result))
                 {
-                    continue;
+                    continue; //失败
                 }
                 result = result.Substring(0, result.IndexOf("?Content-Type="));
                 Debug.WriteLine(docString);
