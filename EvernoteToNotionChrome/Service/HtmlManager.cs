@@ -71,7 +71,10 @@ namespace EvernoteToNotionChrome.Service
                 Debug.WriteLine(fullFilePath);
                 GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"上传中：{fullFilePath}");
                 var result = UploadManager.UploadFile(fullFilePath).Result;
-
+                if (string.IsNullOrEmpty(result))
+                {
+                    continue;
+                }
                 result = result.Substring(0, result.IndexOf("?Content-Type="));
                 Debug.WriteLine(docString);
                 //替换

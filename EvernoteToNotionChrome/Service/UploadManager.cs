@@ -23,11 +23,25 @@ namespace EvernoteToNotionChrome.Service
             IsUploading = true;
             LastUploadFileUrl = "";
 
+            bool hasError = false;
             MainWindow.SingleInstance.Dispatcher.Invoke(() => {
-                BitmapSource bSource = new BitmapImage(new Uri(filePath));
-                Clipboard.SetImage(bSource);
-                MainWindow.SingleInstance.Browser.Paste();
+                try
+                {
+                	BitmapSource bSource = new BitmapImage(new Uri(filePath));
+                    Clipboard.SetImage(bSource);
+                    MainWindow.SingleInstance.Browser.Paste();
+                }
+                catch (System.Exception ex)
+                {
+                    hasError = true;
+                }
             });
+
+
+            if (hasError)
+            {
+                return "";
+            }
 
             //等待上传完毕
             await Task.Run(() =>
