@@ -64,12 +64,14 @@ namespace EvernoteToNotionChrome
         }
 
 
-        private async void TestDrag_Click(object sender, RoutedEventArgs e)
+        private async void ButtonStart_Click(object sender, RoutedEventArgs e)
         {
+            ButtonStart.IsEnabled = false;
             var path = TextBoxPath.Text;
             await Task.Run(() => {
                 StartWithPath(path);
-            }); 
+            });
+            ButtonStart.IsEnabled = true;
         }
 
         private void Browser_Loaded(object sender, RoutedEventArgs e)

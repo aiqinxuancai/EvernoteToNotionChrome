@@ -19,6 +19,15 @@ namespace EvernoteToNotionChrome.Service
             doc.Load(filePath);
 
             var path = Path.GetDirectoryName(filePath);
+            var savePath = path + @"\Replace\" + Path.GetFileName(filePath);
+
+            if (File.Exists(savePath))
+            {
+                //已经存在 不继续处理
+                return;
+            }
+
+
             if (!Directory.Exists(path + @"\Replace\"))
             {
                 Directory.CreateDirectory(path + @"\Replace\");
@@ -87,7 +96,7 @@ namespace EvernoteToNotionChrome.Service
 
             Debug.WriteLine(docString);
 
-            File.WriteAllText(path + @"\Replace\" + Path.GetFileName(filePath), docString);
+            File.WriteAllText(savePath, docString);
 
         }
 
