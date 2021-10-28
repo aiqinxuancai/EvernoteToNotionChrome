@@ -66,9 +66,9 @@ namespace EvernoteToNotionChrome
 
 
             // Set BrowserSubProcessPath based on app bitness at runtime
-            setting.BrowserSubprocessPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
-                                                   Environment.Is64BitProcess ? "x64" : "x86",
-                                                   "CefSharp.BrowserSubprocess.exe");
+            //setting.BrowserSubprocessPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase,
+            //                                       Environment.Is64BitProcess ? "x64" : "x86",
+            //                                       "CefSharp.BrowserSubprocess.exe");
 
             if (!Cef.Initialize(setting, performDependencyCheck: false, browserProcessHandler: null))
             {

@@ -21,11 +21,13 @@
 
 
                 <Button Grid.Column="1" x:Name="ButtonStart" Content="Start" Click="ButtonStart_Click" Margin="10,0,0,0" Height="40" Width="100"></Button>
-
+                <Button Grid.Column="1" x:Name="ButtonTest" Content="Test" Click="ButtonTest_Click" Margin="10,0,0,0" Height="40" Width="100"></Button>
+                
                 <StackPanel>
                     <TextBlock Text="请粘贴Everonte导出的HTML所在目录"></TextBlock>
                     <TextBox x:Name="TextBoxPath" Text="" Margin="0,5,0,0" Height="26"/>
                     <TextBlock x:Name="TextBlockStatus" Text="等待开始..." Margin="0,5,0,0" ></TextBlock>
+                    
                 </StackPanel>
             </Grid>
         </Grid>

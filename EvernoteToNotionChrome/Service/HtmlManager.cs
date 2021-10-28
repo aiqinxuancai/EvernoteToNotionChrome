@@ -3,10 +3,12 @@ using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace EvernoteToNotionChrome.Service
 {
@@ -35,6 +37,9 @@ namespace EvernoteToNotionChrome.Service
 
             List<string> imageList = new List<string>();
 
+            List<string> fileList = new List<string>();
+
+            //处理img标签
             var nodes = doc.DocumentNode.SelectNodes("//img");
 
             if (nodes == null)
@@ -55,19 +60,57 @@ namespace EvernoteToNotionChrome.Service
 
                 GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"处理IMAGE标签：{src.Value}" );
 
-                if (!src.Value.Contains("en_todo"))
+                if (link.ParentNode.Name == "a")
                 {
+                    Debug.WriteLine("上级node是a标签，文件类型，不按照图片处理");
+                    HtmlNode parentNode = link.ParentNode;
+                    string href = parentNode.Attributes["href"].Value; //文件路径
+                    fileList.Add(href);
+                }
+                else if (!src.Value.Contains("en_todo"))
+                {
+                    //读取图片尺寸并替换到image标签，让notion识别宽高
+                    var fullFilePath = path + @"\" + src.Value.Replace(@"/", @"\");
+                    Size imageSize = GetImageSize(fullFilePath);
+                    link.SetAttributeValue("style", $"width: {imageSize.Width}px; height: {imageSize.Height}px;");
+
+                    //如果上级是a标签，则不处理，后续按照a标签处理
                     imageList.Add(src.Value);
                 }
                 else
                 {
                     ConversionTodoList(link, path, src.Value);
-
                 }
             }
 
-            //读取图片，上传
-            var docString = doc.DocumentNode.OuterHtml;
+            //上传所有图片并替换到html文件中
+            var docString = UploadAllImage(imageList, path, doc.DocumentNode.OuterHtml);
+
+            docString = UploadAllImage(fileList, path, docString);
+
+
+            Debug.WriteLine(doc.DocumentNode.OuterHtml);
+
+            File.WriteAllText(savePath, doc.DocumentNode.OuterHtml);
+
+        }
+
+        static Size GetImageSize(string path)
+        {
+            Image image = Bitmap.FromFile(path);
+            return image.Size;
+        }
+
+
+        /// <summary>
+        /// 上传
+        /// </summary>
+        /// <param name="localImagePaths"></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        private static string UploadAllImage(List<string> imageList, string path, string doc)
+        {
+            var docString = doc;
             foreach (string file in imageList)
             {
                 if (file.StartsWith("file:") || file.StartsWith("http:") || file.StartsWith("https:"))
@@ -93,16 +136,12 @@ namespace EvernoteToNotionChrome.Service
                 }
 
             }
-
-            Debug.WriteLine(docString);
-
-            File.WriteAllText(savePath, docString);
-
+            return docString;
         }
 
 
 
-        static void ConversionTodoList(HtmlNode node, string basePath, string path)
+        private static void ConversionTodoList(HtmlNode node, string basePath, string path)
         {
 
             var parentNode = node.ParentNode;
