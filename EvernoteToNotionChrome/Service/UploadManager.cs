@@ -82,12 +82,19 @@ namespace EvernoteToNotionChrome.Service
                 return "";
             }
 
+            int timeSecond = 0;
             //等待上传完毕
             await Task.Run(() =>
             {
                 while (IsUploading)
                 {
                     Thread.Sleep(1000);
+                    timeSecond++;
+                    if (timeSecond == 40)
+                    {
+                        Debug.WriteLine("超时");
+                        break;
+                    }
                 }
             });
 
