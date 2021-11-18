@@ -33,13 +33,19 @@ namespace EvernoteToNotionChrome
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        public static MainWindow SingleInstance { set; get; }
+        public static MainWindow Instance { set; get; }
+
+        public bool Overwrite { set; get; } = false;
 
         public MainWindow()
         {
-            SingleInstance = this;
+            Instance = this;
+
+            
 
             InitializeComponent();
+            OverwriteCheckBox.DataContext = this;
+
 
             BrowserSettings browserSettings = new BrowserSettings();
             browserSettings.Javascript = CefSharp.CefState.Enabled;
