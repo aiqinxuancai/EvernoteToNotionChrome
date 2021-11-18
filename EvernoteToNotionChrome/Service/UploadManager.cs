@@ -1,17 +1,26 @@
 ﻿using CefSharp;
+using CefSharp.Internals;
+using EvernoteToNotionChrome.Utils;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Media;
+
+using System.Numerics;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System.Windows.Media.Imaging;
+using System.IO;
 
 namespace EvernoteToNotionChrome.Service
 {
+
     public class UploadManager
     {
         public static bool IsUploading { set; get; }
@@ -24,15 +33,45 @@ namespace EvernoteToNotionChrome.Service
             LastUploadFileUrl = "";
 
             bool hasError = false;
-            MainWindow.SingleInstance.Dispatcher.Invoke(() => {
+
+            Debug.WriteLine($"开始上传{filePath}");
+
+            MainWindow.Instance.Dispatcher.Invoke(() => {
                 try
                 {
-                	BitmapSource bSource = new BitmapImage(new Uri(filePath));
-                    Clipboard.SetImage(bSource);
-                    MainWindow.SingleInstance.Browser.Paste();
+                    using (Image image =Image.Load(filePath)) //使用imagesharp减少错误
+                    {
+                        MemoryStream memoryStream = new MemoryStream();
+                        image.SaveAsPng(memoryStream);
+                        BitmapSource bSource = BitmapToBitmapImage(new System.Drawing.Bitmap(memoryStream)); 
+                        Clipboard.SetImage(bSource);
+                        MainWindow.Instance.Browser.Paste();
+                    }
+                }
+                catch (NotSupportedException ex)
+                {
+                    //filePath不是图片
+                    //Debug.WriteLine(ex);
+                    Debug.WriteLine("此文件不是图片");
+                    StringCollection list = new ();
+                    list.Add(filePath);
+  
+                    //Clipboard.SetFileDropList(list);
+                    //MainWindow.SingleInstance.Browser.Paste();
+
+                    //Core.DragData.Create()
+                    //IDragData dragData = DragData.Create();
+                    //dragData.FileName = filePath;
+                    //dragData.IsFile = true;
+
+                    //MainWindow.SingleInstance.Browser.GetBrowserHost().GetWindowHandle()
+                    //Win32Drap.SendFileDrop(new WindowInteropHelper(MainWindow.SingleInstance).Handle, filePath, 550, 400);
+
+                    //((IRenderWebBrowser)MainWindow.SingleInstance.Browser).StartDragging(dragData, CefSharp.Enums.DragOperationsMask.Move, 550, 400);
                 }
                 catch (System.Exception ex)
                 {
+                    Debug.WriteLine(ex);
                     hasError = true;
                 }
             });
@@ -56,6 +95,24 @@ namespace EvernoteToNotionChrome.Service
             return LastUploadFileUrl;
         }
 
+        // Bitmap --> BitmapImage
+        public static BitmapImage BitmapToBitmapImage(System.Drawing.Bitmap bitmap)
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                stream.Position = 0;
+                BitmapImage result = new BitmapImage();
+                result.BeginInit();
+                // According to MSDN, "The default OnDemand cache option retains access to the stream until the image is needed."
+                // Force the bitmap to load right now so we can dispose the stream.
+                result.CacheOption = BitmapCacheOption.OnLoad;
+                result.StreamSource = stream;
+                result.EndInit();
+                result.Freeze();
+                return result;
+            }
+        }
 
         public static void PutSuccess(string url)
         {

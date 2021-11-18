@@ -1,4 +1,5 @@
 ﻿using CefSharp;
+using CefSharp.Internals;
 using EvernoteToNotionChrome.Service;
 using EvernoteToNotionChrome.Utils;
 using MahApps.Metro.Controls;
@@ -22,6 +23,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
+
+
 namespace EvernoteToNotionChrome
 {
     /// <summary>
@@ -29,19 +33,27 @@ namespace EvernoteToNotionChrome
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        public static MainWindow SingleInstance { set; get; }
+        public static MainWindow Instance { set; get; }
+
+        public bool Overwrite { set; get; } = false;
 
         public MainWindow()
         {
-            SingleInstance = this;
+            Instance = this;
+
+            
 
             InitializeComponent();
+            OverwriteCheckBox.DataContext = this;
+
 
             BrowserSettings browserSettings = new BrowserSettings();
             browserSettings.Javascript = CefSharp.CefState.Enabled;
             browserSettings.JavascriptAccessClipboard = CefSharp.CefState.Enabled;
             browserSettings.JavascriptDomPaste = CefSharp.CefState.Enabled;
             Browser.BrowserSettings = browserSettings;
+
+            
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -52,6 +64,8 @@ namespace EvernoteToNotionChrome
 
             Browser.RequestHandler = new OxoRequestHandler();
             Browser.Address = "https://notion.so/";
+            
+            var screenInfo = ((IRenderWebBrowser)Browser).GetScreenInfo();
 
             GlobalNotification.Default.Register(GlobalNotification.NotificationOutputLogInfo, this, (msg) => {
                 Debug.WriteLine(msg.Source);
@@ -73,6 +87,13 @@ namespace EvernoteToNotionChrome
             });
             ButtonStart.IsEnabled = true;
         }
+
+        private async void ButtonTest_Click(object sender, RoutedEventArgs e)
+        {
+            await UploadManager.UploadFile(@"C:\Users\aiqin\Documents\Tencent Files\76835052\FileRecv\tinified (5).zip");
+        }
+
+        
 
         private void Browser_Loaded(object sender, RoutedEventArgs e)
         {
