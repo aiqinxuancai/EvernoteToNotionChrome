@@ -18,7 +18,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: '6.0.x'
       - name: Clean
         run: dotnet clean $env:GITHUB_WORKSPACE\EvernoteToNotionChrome.sln --configuration Release && dotnet nuget locals all --clear
       - name: Restore dependencies

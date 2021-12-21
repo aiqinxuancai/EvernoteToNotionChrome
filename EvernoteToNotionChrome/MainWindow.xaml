@@ -7,7 +7,7 @@
         xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="EvernoteToNotionChrome" Height="720" Width="1080" Loaded="Window_Loaded" AllowDrop="True"
-                 x:Name="Self">
+                 x:Name="Self" TitleCharacterCasing="Normal">
 
     <mah:MetroWindow.Resources>
         <ResourceDictionary>
