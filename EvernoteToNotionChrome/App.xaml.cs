@@ -1,5 +1,6 @@
 ﻿using CefSharp;
 using CefSharp.Wpf;
+using EvernoteToNotionChrome.Service;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -24,6 +25,9 @@ namespace EvernoteToNotionChrome
 
             //Add Custom assembly resolver
             AppDomain.CurrentDomain.AssemblyResolve += Resolver;
+
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+            DispatcherUnhandledException += Current_DispatcherUnhandledException;
 
             //Any CefSharp references have to be in another method with NonInlining
             // attribute so the assembly rolver has time to do it's thing.
@@ -100,6 +104,16 @@ namespace EvernoteToNotionChrome
 
 
 
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception ex = (Exception)e.ExceptionObject;
+            EasyLogManager.Logger.Error("Error#1 " + ex?.Message + Environment.NewLine + ex?.InnerException?.ToString());
+        }
 
+        private void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        {
+            EasyLogManager.Logger.Error("Error#2 " + e?.Exception?.Message + Environment.NewLine + e?.Exception?.InnerException?.ToString());
+            e.Handled = true;
+        }
     }
 }
