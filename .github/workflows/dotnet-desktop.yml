@@ -11,9 +11,6 @@ jobs:
     name: Dotnet Build
     
     steps:
-      - name: Install 7Zip PowerShell Module
-        shell: powershell
-        run: Install-Module 7Zip4PowerShell -Force -Verbose
       - uses: actions/checkout@v2
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
@@ -33,7 +30,7 @@ jobs:
       - run: powershell Expand-Archive -Path .\DotNetDllPathPatcherCMD.zip -DestinationPath .\DotNetDllPathPatcherCMD
       - run: powershell .\DotNetDllPathPatcherCMD\publish\DotNetDllPathPatcherCMD.exe $env:GITHUB_WORKSPACE\WkyFast\bin\Release\net6.0-windows\win-x64\publish\EvernoteToNotionChrome.exe
       - name: Compress
-        run: powershell Compress-7Zip $env:GITHUB_WORKSPACE\EvernoteToNotionChrome\bin\Release\net6.0-windows\win-x64\publish -ArchiveFileName "EvernoteToNotionChrome.zip" -Format Zip
+        run: powershell Compress-Archive -Path $env:GITHUB_WORKSPACE\EvernoteToNotionChrome\bin\Release\net6.0-windows\win-x64\publish -DestinationPath .\EvernoteToNotionChrome.zip
       - name: Create a Release
         uses: ncipollo/release-action@v1
         with:
