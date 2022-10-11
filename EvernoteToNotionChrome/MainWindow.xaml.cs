@@ -43,9 +43,12 @@ namespace EvernoteToNotionChrome
             
 
             InitializeComponent();
+            Wpf.Ui.Appearance.Accent.ApplySystemAccent();
             OverwriteCheckBox.DataContext = this;
 
 
+
+            
             BrowserSettings browserSettings = new BrowserSettings();
             browserSettings.Javascript = CefSharp.CefState.Enabled;
             browserSettings.JavascriptAccessClipboard = CefSharp.CefState.Enabled;
