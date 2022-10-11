@@ -2,7 +2,6 @@
 using CefSharp.Internals;
 using EvernoteToNotionChrome.Service;
 using EvernoteToNotionChrome.Utils;
-using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -31,7 +30,7 @@ namespace EvernoteToNotionChrome
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow
+    public partial class MainWindow : Window
     {
         public static MainWindow Instance { set; get; }
 

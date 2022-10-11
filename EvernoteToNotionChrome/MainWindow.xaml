@@ -1,21 +1,20 @@
-﻿<mah:MetroWindow x:Class="EvernoteToNotionChrome.MainWindow"
+﻿<Window x:Class="EvernoteToNotionChrome.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EvernoteToNotionChrome" xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
-        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
         mc:Ignorable="d"
         Title="EvernoteToNotionChrome" Height="720" Width="1080" Loaded="Window_Loaded" AllowDrop="True"
-                 x:Name="Self" TitleCharacterCasing="Normal">
+                 x:Name="Self" >
 
-    <mah:MetroWindow.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Style/AQButton.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </mah:MetroWindow.Resources>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="941*"/>
@@ -34,19 +33,18 @@
                 </Grid.ColumnDefinitions>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Top" Background="#0C000000">
+        <Grid Grid.Row="1" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Top" >
             
         </Grid>
             <Grid Grid.Row="1">
-            <Border  CornerRadius="4" Background="#0C000000" Grid.RowSpan="1" Grid.Row="1" Margin="10,10,0,10"  >
+            <Border  CornerRadius="4"  Grid.RowSpan="1" Grid.Row="1" Margin="10,10,0,10"  >
                 <Grid>
                     <TextBox Text=""  Grid.Row="1" x:Name="TextBoxPath"  
-                     mah:ControlsHelper.FocusBorderThickness="0" 
-                     mah:ControlsHelper.FocusBorderBrush="Transparent"
-                     mah:ControlsHelper.MouseOverBorderBrush="Transparent"
-                     Background="Transparent" 
+
+                     
                      AllowDrop="True" 
-                     BorderBrush="#00CCCCCC" mah:TextBoxHelper.Watermark="请粘贴Everonte导出的HTML所在目录"  HorizontalAlignment="Stretch" Margin="0,0,100,0" VerticalAlignment="Center"  />
+               
+                             HorizontalAlignment="Stretch" Margin="0,0,100,0" VerticalAlignment="Center"  />
 
                     <CheckBox  x:Name="OverwriteCheckBox" IsChecked="{Binding Path=Overwrite, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Center" Content="覆盖文件" Margin="0,0,5,0" Foreground="#E5000000" ></CheckBox>
                 </Grid>
@@ -58,9 +56,9 @@
         </Grid>
         
         <Grid Grid.Row="1" Grid.Column="1">
-            <Button Grid.Column="1" x:Name="ButtonStart" Style="{StaticResource AQButtonBlue}" Content="Start" Click="ButtonStart_Click" Margin="10,0,0,0" Height="40" Width="120"></Button>
+            <Button Grid.Column="1" x:Name="ButtonStart" Content="Start" Click="ButtonStart_Click" Margin="10,0,0,0" Height="40" Width="120"></Button>
             <!--<Button Grid.Column="1" x:Name="ButtonTest" Content="Test" Click="ButtonTest_Click" Margin="10,0,0,0" Height="40" Width="100"></Button>-->
         </Grid>
         <wpf:ChromiumWebBrowser Grid.Row="0"  x:Name="Browser" AllowDrop="True" Grid.RowSpan="2" Loaded="Browser_Loaded" Grid.ColumnSpan="2" Margin="0,0,0,90" />
     </Grid>
-</mah:MetroWindow>
+</Window>
