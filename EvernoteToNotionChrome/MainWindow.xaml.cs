@@ -2,12 +2,15 @@
 using CefSharp.Internals;
 using EvernoteToNotionChrome.Service;
 using EvernoteToNotionChrome.Utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -80,14 +83,17 @@ namespace EvernoteToNotionChrome
         }
 
 
+
         private async void ButtonStart_Click(object sender, RoutedEventArgs e)
         {
+
             ButtonStart.IsEnabled = false;
             var path = TextBoxPath.Text;
             await Task.Run(() => {
                 StartWithPath(path);
             });
             ButtonStart.IsEnabled = true;
+
         }
 
         private async void ButtonTest_Click(object sender, RoutedEventArgs e)
@@ -125,6 +131,11 @@ namespace EvernoteToNotionChrome
                 });
                 
             }
+        }
+
+        private void HomeButton_Click(object sender, RoutedEventArgs e)
+        {
+            BrowserHelper.OpenUrlBrowser("https://github.com/aiqinxuancai/EvernoteToNotionChrome");
         }
     }
 }

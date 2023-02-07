@@ -7,8 +7,9 @@
         xmlns:local="clr-namespace:EvernoteToNotionChrome" xmlns:wpf="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
         mc:Ignorable="d"
         Background="{DynamicResource ApplicationBackgroundBrush}"
+         Style="{StaticResource UiWindow}"
         WindowStartupLocation="CenterScreen"
-        Title="EvernoteToNotionChrome" Height="720" Width="1080" Loaded="Window_Loaded" AllowDrop="True"
+        Title="EvernoteToNotionChrome" Height="720" Width="1080" WindowStyle="SingleBorderWindow" Loaded="Window_Loaded" AllowDrop="True"
                  x:Name="Self" >
 
     <Window.Resources>
@@ -24,11 +25,30 @@
             <ColumnDefinition Width="139*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50"/>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="24"/>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="1" Margin="10,10,10,10" Grid.ColumnSpan="2">
+
+        <ui:TitleBar Grid.Row="0" Grid.ColumnSpan="2" Icon="icon.ico" Title="EvernoteToNotionChrome">
+            <ui:TitleBar.Header>
+                <StackPanel
+                    Margin="0,0,12,0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <ui:Button x:Name="HomeButton"
+                        Margin="0,0,4,0"
+                        Padding="4,4"
+                        Appearance="Secondary"
+                        Icon="Home12" Click="HomeButton_Click" />
+            
+                </StackPanel>
+            </ui:TitleBar.Header>
+        </ui:TitleBar>
+
+        <Grid Grid.Row="2" Margin="10,10,10,10" Grid.ColumnSpan="2">
             <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -36,26 +56,26 @@
                 </Grid.ColumnDefinitions>
             </Grid>
         </Grid>
-        <Grid Grid.Row="1" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Top" >
+        <Grid Grid.Row="2" Height="1" Grid.ColumnSpan="2" VerticalAlignment="Top" >
 
         </Grid>
-        <Grid Grid.Row="1">
-            <Border  CornerRadius="4"  Grid.RowSpan="1" Grid.Row="1" Margin="10,10,0,10"  >
+        <Grid Grid.Row="2">
+            <Border  CornerRadius="4"  Grid.RowSpan="1" Grid.Row="2" Margin="10,10,0,10"  >
                 <Grid>
-                    <TextBox Text=""  Grid.Row="1" x:Name="TextBoxPath" AllowDrop="True" HorizontalAlignment="Stretch" Margin="0,0,100,0" VerticalAlignment="Center"  />
+                    <ui:TextBox  Grid.Row="1" x:Name="TextBoxPath" AllowDrop="True" HorizontalAlignment="Stretch" Margin="0,0,100,0" VerticalAlignment="Center" PlaceholderText="粘贴从EverNote导出的HTML所在目录(Pasting Evernote HTML export directory)"    />
                     <CheckBox  x:Name="OverwriteCheckBox" IsChecked="{Binding Path=Overwrite, Mode=TwoWay}" HorizontalAlignment="Right" VerticalAlignment="Center" Content="覆盖文件" Margin="0,0,5,0" ></CheckBox>
                 </Grid>
 
             </Border>
         </Grid>
-        <Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Background="#0C000000">
-            <TextBlock x:Name="TextBlockStatus" Text="等待开始..." Margin="10,0,10,0" VerticalAlignment="Center" Foreground="#CC000000" ></TextBlock>
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="#0C000000">
+            <TextBlock x:Name="TextBlockStatus" Text="等待开始(Waiting to start)..." Margin="10,0,10,0" VerticalAlignment="Center" Foreground="#CC000000" ></TextBlock>
         </Grid>
 
-        <Grid Grid.Row="1" Grid.Column="1">
-            <ui:Button Grid.Column="1"  Appearance="Primary" x:Name="ButtonStart" Content="Start" Click="ButtonStart_Click" Margin="10,0,0,0" Height="40" Width="120"></ui:Button>
+        <Grid Grid.Row="2" Grid.Column="1">
+            <ui:Button Grid.Column="1"  x:Name="ButtonStart" Content="Start" Click="ButtonStart_Click" Margin="10,0,0,0" Height="40" Width="120"></ui:Button>
             <!--<Button Grid.Column="1" x:Name="ButtonTest" Content="Test" Click="ButtonTest_Click" Margin="10,0,0,0" Height="40" Width="100"></Button>-->
         </Grid>
-        <wpf:ChromiumWebBrowser Grid.Row="0"  x:Name="Browser" AllowDrop="True" Grid.RowSpan="2" Loaded="Browser_Loaded" Grid.ColumnSpan="2" Margin="0,0,0,60" />
+        <wpf:ChromiumWebBrowser Grid.Row="1"  x:Name="Browser" AllowDrop="True" Grid.RowSpan="1" Loaded="Browser_Loaded" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

@@ -39,12 +39,13 @@ namespace EvernoteToNotionChrome.Service
             MainWindow.Instance.Dispatcher.Invoke(() => {
                 try
                 {
-                    using (Image image =Image.Load(filePath)) //使用imagesharp减少错误
+                    using (Image image = Image.Load(filePath)) //使用imagesharp减少错误
                     {
                         MemoryStream memoryStream = new MemoryStream();
                         image.SaveAsPng(memoryStream);
-                        BitmapSource bSource = BitmapToBitmapImage(new System.Drawing.Bitmap(memoryStream)); 
+                        BitmapSource bSource = BitmapToBitmapImage(new System.Drawing.Bitmap(memoryStream));
                         Clipboard.SetImage(bSource);
+
                         MainWindow.Instance.Browser.Paste();
                     }
                 }
@@ -53,21 +54,15 @@ namespace EvernoteToNotionChrome.Service
                     //filePath不是图片
                     //Debug.WriteLine(ex);
                     Debug.WriteLine("此文件不是图片");
-                    StringCollection list = new ();
-                    list.Add(filePath);
-  
-                    //Clipboard.SetFileDropList(list);
-                    //MainWindow.SingleInstance.Browser.Paste();
 
-                    //Core.DragData.Create()
-                    //IDragData dragData = DragData.Create();
-                    //dragData.FileName = filePath;
-                    //dragData.IsFile = true;
+                    StringCollection filePaths = new StringCollection
+                        {
+                            filePath
+                        };
 
-                    //MainWindow.SingleInstance.Browser.GetBrowserHost().GetWindowHandle()
-                    //Win32Drap.SendFileDrop(new WindowInteropHelper(MainWindow.SingleInstance).Handle, filePath, 550, 400);
+                    Clipboard.SetFileDropList(filePaths);
+                    MainWindow.Instance.Browser.Paste();
 
-                    //((IRenderWebBrowser)MainWindow.SingleInstance.Browser).StartDragging(dragData, CefSharp.Enums.DragOperationsMask.Move, 550, 400);
                 }
                 catch (System.Exception ex)
                 {

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
 
     <!-- 如果你的项目是 Exe，则设为 WinExe；如果是 WPF 类库，则删掉这一行 -->
@@ -11,7 +11,7 @@
     <!-- <ApplicationManifest>Properties\App.manifest</ApplicationManifest> -->
 
     <!-- 如果你的原有项目中有 App.ico 图标，则在此加入 -->
-    <!-- <ApplicationIcon>Properties\App.ico</ApplicationIcon> -->
+    <ApplicationIcon>icon.ico</ApplicationIcon>
 
     <!-- 如果你的原有项目中有自定义的 Main 函数，则在此加入 -->
     <!-- <StartupObject>Walterlv.Whitman.Program</StartupObject> -->
@@ -20,13 +20,19 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="94.4.110" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.36" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
     <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.3</Version>
+      <Version>13.0.2</Version>
     </PackageReference>
-    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
+    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="WPF-UI" Version="2.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icon.ico" />
   </ItemGroup>
 </Project>
