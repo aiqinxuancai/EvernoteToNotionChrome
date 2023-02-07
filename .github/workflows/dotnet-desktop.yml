@@ -15,7 +15,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '7.0.x'
       - name: Clean
         run: dotnet clean $env:GITHUB_WORKSPACE\EvernoteToNotionChrome.sln --configuration Release && dotnet nuget locals all --clear
       - name: Restore dependencies
@@ -30,7 +30,7 @@ jobs:
       - run: powershell Expand-Archive -Path .\DotNetDllPathPatcherCMD.zip -DestinationPath .\DotNetDllPathPatcherCMD
       - run: powershell .\DotNetDllPathPatcherCMD\publish\DotNetDllPathPatcherCMD.exe $env:GITHUB_WORKSPACE\EvernoteToNotionChrome\bin\Release\net6.0-windows\win-x64\publish\EvernoteToNotionChrome.exe
       - name: Compress
-        run: powershell Compress-Archive -Path $env:GITHUB_WORKSPACE\EvernoteToNotionChrome\bin\Release\net6.0-windows\win-x64\publish -DestinationPath .\EvernoteToNotionChrome.zip
+        run: powershell Compress-Archive -Path $env:GITHUB_WORKSPACE\EvernoteToNotionChrome\bin\Release\net7.0-windows\win-x64\publish -DestinationPath .\EvernoteToNotionChrome.zip
       - name: Create a Release
         uses: ncipollo/release-action@v1
         with:
