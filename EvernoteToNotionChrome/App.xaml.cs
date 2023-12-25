@@ -1,4 +1,7 @@
-﻿using CefSharp;
+﻿global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Hosting;
+using CefSharp;
 using CefSharp.Wpf;
 using EvernoteToNotionChrome.Service;
 using System;
@@ -12,6 +15,8 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 
+using Wpf.Ui;
+
 namespace EvernoteToNotionChrome
 {
     /// <summary>
@@ -19,6 +24,38 @@ namespace EvernoteToNotionChrome
     /// </summary>
     public partial class App : Application
     {
+        private static readonly IHost _host = Host.CreateDefaultBuilder()
+        .ConfigureAppConfiguration(c =>
+        {
+            c.SetBasePath(AppContext.BaseDirectory);
+        })
+        .ConfigureServices(
+            (context, services) =>
+            {
+                // App Host
+                //services.AddHostedService<ApplicationHostService>();
+
+                // Main window container with navigation
+                // services.AddSingleton<IWindow, MainWindow>();
+                services.AddSingleton<MainWindowViewModel>();
+                services.AddSingleton<INavigationService, NavigationService>();
+                services.AddSingleton<ISnackbarService, SnackbarService>();
+                services.AddSingleton<IContentDialogService, ContentDialogService>();
+                //services.AddSingleton<WindowsProviderService>();
+            }
+        )
+        .Build();
+
+        /// <summary>
+        /// Gets registered service.
+        /// </summary>
+        /// <typeparam name="T">Type of the service to get.</typeparam>
+        /// <returns>Instance of the service or <see langword="null"/>.</returns>
+        public static T? GetService<T>() where T : class
+        {
+            return _host.Services.GetService(typeof(T)) as T ?? null;
+        }
+
 
         App() 
         {
@@ -47,7 +84,7 @@ namespace EvernoteToNotionChrome
 
             //setting.RemoteDebuggingPort = 8088;
             setting.Locale = "zh-CN";
-            //setting.UserAgent = "Mozilla/6.0 (Windows NT 6.2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.241.0 Safari/537.36";
+            setting.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0";
 
             //代理设置
             setting.CefCommandLineArgs.Add("enable-npapi", "1");

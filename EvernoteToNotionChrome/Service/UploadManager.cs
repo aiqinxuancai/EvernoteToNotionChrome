@@ -51,8 +51,6 @@ namespace EvernoteToNotionChrome.Service
                 }
                 catch (NotSupportedException ex)
                 {
-                    //filePath不是图片
-                    //Debug.WriteLine(ex);
                     Debug.WriteLine("此文件不是图片");
 
                     StringCollection filePaths = new StringCollection

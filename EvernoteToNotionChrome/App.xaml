@@ -1,16 +1,15 @@
-﻿<Application x:Class="EvernoteToNotionChrome.App"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:EvernoteToNotionChrome"
-             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-             StartupUri="MainWindow.xaml">
+﻿<Application
+    x:Class="EvernoteToNotionChrome.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:EvernoteToNotionChrome"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ControlsDictionary />
                 <ui:ThemesDictionary Theme="Light" />
-                
-
                 <ResourceDictionary Source="pack://application:,,,/Style/MetroFont.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

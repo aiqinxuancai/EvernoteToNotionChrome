@@ -1,16 +1,21 @@
 ﻿using CefSharp;
 using CefSharp.Internals;
+using EvernoteToNotionChrome.Models;
 using EvernoteToNotionChrome.Service;
 using EvernoteToNotionChrome.Utils;
+using EvernoteToNotionChrome.Views;
 using Newtonsoft.Json;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,8 +28,8 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-
+using Wpf.Ui;
+using Wpf.Ui.Controls;
 
 
 
@@ -33,40 +38,108 @@ namespace EvernoteToNotionChrome
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : FluentWindow, IContentDialogService, INotifyPropertyChanged
     {
         public static MainWindow Instance { set; get; }
 
         public bool Overwrite { set; get; } = false;
 
+
+        public MainWindowViewModel ViewModel { get; }
+
+
+
+
+        private string status;
+
+        public string Status
+        {
+            get { return status; }
+            set
+            {
+                status = value;
+                OnPropertyChanged(nameof(Status));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public INavigationView GetNavigation()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Navigate(Type pageType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetServiceProvider(IServiceProvider serviceProvider)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPageService(IPageService pageService)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowWindow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseWindow()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetContentPresenter(ContentPresenter contentPresenter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ContentPresenter GetContentPresenter()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ContentDialogResult> ShowAlertAsync(string title, string message, string closeButtonText, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ContentDialogResult> ShowSimpleDialogAsync(SimpleContentDialogCreateOptions options, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+
         public MainWindow()
         {
             Instance = this;
 
-            
+            Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
 
             InitializeComponent();
-            Wpf.Ui.Appearance.Accent.ApplySystemAccent();
+            DataContext = this;
             OverwriteCheckBox.DataContext = this;
-
-
-
             
             BrowserSettings browserSettings = new BrowserSettings();
             browserSettings.Javascript = CefSharp.CefState.Enabled;
             browserSettings.JavascriptAccessClipboard = CefSharp.CefState.Enabled;
             browserSettings.JavascriptDomPaste = CefSharp.CefState.Enabled;
             Browser.BrowserSettings = browserSettings;
-
-            
         }
+
+        
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //Browser.MouseUp += ChromeMain_MouseUp;
-            //Browser.FrameLoadEnd += ChromeMain_FrameLoadEnd;
-            //Browser.LoadingStateChanged += ChromeMain_LoadingStateChanged;
-
             Browser.RequestHandler = new OxoRequestHandler();
             Browser.Address = "https://notion.so/";
             
@@ -75,33 +148,44 @@ namespace EvernoteToNotionChrome
             GlobalNotification.Default.Register(GlobalNotification.NotificationOutputLogInfo, this, (msg) => {
                 Debug.WriteLine(msg.Source);
                 this.Dispatcher.Invoke(() => {
-                    TextBlockStatus.Text = (string)msg.Source;
+                    //TextBlockStatus.Text = (string)msg.Source;
+                    Status = (string)msg.Source;
                 });
 
             });
-
         }
-
-
 
         private async void ButtonStart_Click(object sender, RoutedEventArgs e)
         {
 
             ButtonStart.IsEnabled = false;
             var path = TextBoxPath.Text;
+
+
+            UploadProgressView.Visibility = Visibility.Visible;
+
+
             await Task.Run(() => {
                 StartWithPath(path);
             });
+
+
+            UploadProgressView.Visibility = Visibility.Collapsed;
             ButtonStart.IsEnabled = true;
 
         }
 
         private async void ButtonTest_Click(object sender, RoutedEventArgs e)
         {
-            await UploadManager.UploadFile(@"C:\Users\aiqin\Documents\Tencent Files\76835052\FileRecv\tinified (5).zip");
-        }
+            //await UploadManager.UploadFile(@"C:\Users\aiqin\Documents\Tencent Files\76835052\FileRecv\tinified (5).zip");
+            //DialogResultText = result switch
+            //{
+            //    ContentDialogResult.Primary => "User saved their work",
+            //    ContentDialogResult.Secondary => "User did not save their work",
+            //    _ => "User cancelled the dialog"
+            //};
 
-        
+        }
 
         private void Browser_Loaded(object sender, RoutedEventArgs e)
         {
@@ -109,25 +193,67 @@ namespace EvernoteToNotionChrome
 
         }
 
-        private void StartWithPath(string path)
+        private async void StartWithPath(string path)
         {
             if (Directory.Exists(path))
             {
-                foreach (var item in Directory.GetFiles(path, "*.html"))
+
+                var files = Directory.GetFiles(path, "*.html");
+
+                var allImages = 0;
+                foreach (var item in files)
                 {
+                    allImages += HtmlManager.GetHTMLImageCount(item);
+                }
+                //总图片
+
+                foreach (var item in files)
+                {
+                    GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"正在处理：{Path.GetFileName(item) }");
                     HtmlManager.UploadHtmlData(item);
                 }
-                this.Dispatcher.Invoke(() =>
+
+                await this.Dispatcher.Invoke(async () => 
                 {
-                    TextBlockStatus.Text = @"完成，处理完成的HTML存储在\Replace下";
+                    Status = @"完成，处理完成的HTML存储在\Replace下";
+                    //TODO 弹出完成提示，并前往Replace
+
+                    var service = App.GetService<IContentDialogService>();
+                    service.SetContentPresenter(DialogPresenter);
+                    var result = await service.ShowSimpleDialogAsync(
+                        new SimpleContentDialogCreateOptions()
+                        {
+                            Title = "Save your work?",
+                            Content = "aaaa",
+                            PrimaryButtonText = "Save",
+                            SecondaryButtonText = "Don't Save",
+                            CloseButtonText = "Cancel",
+                        }
+                    );
+
+
                 });
                 
             }
             else
             {
-                this.Dispatcher.Invoke(() =>
+                await this.Dispatcher.Invoke(async () =>
                 {
-                    TextBlockStatus.Text = "目录错误";
+                    Status = @"目录错误";
+                    //TODO 弹出错误提示
+
+                    var service = App.GetService<IContentDialogService>();
+                    service.SetContentPresenter(DialogPresenter);
+                    var result = await service.ShowSimpleDialogAsync(
+                        new SimpleContentDialogCreateOptions()
+                        {
+                            Title = "Save your work?",
+                            Content = "aaaa",
+                            PrimaryButtonText = "Save",
+                            SecondaryButtonText = "Don't Save",
+                            CloseButtonText = "Cancel",
+                        }
+                    );
                 });
                 
             }

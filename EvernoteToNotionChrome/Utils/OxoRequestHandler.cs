@@ -1,6 +1,7 @@
 ﻿using CefSharp;
 using CefSharp.Handler;
 using EvernoteToNotionChrome.Service;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -54,19 +55,18 @@ namespace EvernoteToNotionChrome.Utils
             {
 
                 //https://www.notion.so/api/v3/getUploadFileUrl
-                //if (request.Method == "POST" && request.Url.EndsWith("getUploadFileUrl"))
-                //{
-                //    var dataFilter = new MemoryStreamResponseFilter(); //新建成数据 处理器
-                //    responseDictionary.Add(request.Identifier, dataFilter);
-                //    return dataFilter;
-                //}
-
-                if (request.Method == "PUT" && request.Url.Contains("X-Amz-Signature"))
+                if (request.Method == "POST" && request.Url.EndsWith("/getUploadFileUrl"))
                 {
                     var dataFilter = new MemoryStreamResponseFilter(); //新建成数据 处理器
                     responseDictionary.Add(request.Identifier, dataFilter);
                     return dataFilter;
                 }
+                //if (request.Method == "PUT" && request.Url.Contains("X-Amz-Signature"))
+                //{
+                //    var dataFilter = new MemoryStreamResponseFilter(); //新建成数据 处理器
+                //    responseDictionary.Add(request.Identifier, dataFilter);
+                //    return dataFilter;
+                //}
             }
             catch (System.Exception ex)
             {
@@ -97,6 +97,7 @@ namespace EvernoteToNotionChrome.Utils
                     Debug.WriteLine("------------------------------------------------------------------------");
                     Debug.WriteLine(extension);
 
+                    
 
                     if (request.Method != "PUT")
                     {
@@ -116,6 +117,18 @@ namespace EvernoteToNotionChrome.Utils
                         var dataLength = filter.Data.Length;
                         var dataAsUtf8String = Encoding.UTF8.GetString(data);
                         Debug.WriteLine(dataAsUtf8String);
+
+                        if (request.Url.EndsWith(@"/getUploadFileUrl"))
+                        {
+                            JObject root = JObject.Parse(dataAsUtf8String);
+
+                            if (root.ContainsKey("signedGetUrl")) {
+                                string signedGetUrl = (string)root["signedGetUrl"];
+                                UploadManager.PutSuccess(signedGetUrl);
+                            }
+
+                        }
+
                     }
                     else
                     {
@@ -123,13 +136,9 @@ namespace EvernoteToNotionChrome.Utils
                         if (response.StatusCode == 200)
                         {
                             Debug.WriteLine("PUT完成");
-                            UploadManager.PutSuccess(request.Url); ;
+                            //UploadManager.PutSuccess(request.Url); ;
                         }
                     }
-
-
-                    //数据到达
-                    //HttpPacketHookManager.PacketRoute(url.PathAndQuery.Replace("/", "_"), dataAsUtf8String, postData, "", "");
                 }
             }
             catch (System.Exception ex)

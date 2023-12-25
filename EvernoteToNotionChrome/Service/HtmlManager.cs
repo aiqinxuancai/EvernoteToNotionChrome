@@ -15,7 +15,12 @@ namespace EvernoteToNotionChrome.Service
     public class HtmlManager
     {
 
-        public static void UploadHtmlData(string filePath)
+        /// <summary>
+        /// 返回图片总数
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns></returns>
+        public static int UploadHtmlData(string filePath)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(filePath);
@@ -26,7 +31,7 @@ namespace EvernoteToNotionChrome.Service
             if (!MainWindow.Instance.Overwrite && File.Exists(savePath))
             {
                 //已经存在 不继续处理
-                return;
+                return 0;
             }
 
             if (!Directory.Exists(path + @"\Replace\"))
@@ -38,11 +43,11 @@ namespace EvernoteToNotionChrome.Service
             var nodes = doc.DocumentNode.SelectNodes("//img");
             if (nodes == null)
             {
-                File.WriteAllText(path + @"\Replace\" + Path.GetFileName(filePath), File.ReadAllText(filePath));
-                return;
+                File.WriteAllText(path + @"\Replace\" + System.IO.Path.GetFileName(filePath), File.ReadAllText(filePath));
+                return 0;
             }
            
-            GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"处理HTML：{filePath}");
+           
 
             Debug.WriteLine($"开始路径{filePath}");
             Debug.WriteLine($"找到图片{nodes.Count}个");
@@ -58,8 +63,28 @@ namespace EvernoteToNotionChrome.Service
             //docString = UploadAllImage(fileList, path, docString);
 
             File.WriteAllText(savePath, docString);
+            return imageList.Count;
 
         }
+
+        public static int GetHTMLImageCount(string filePath)
+        {
+            var path = Path.GetDirectoryName(filePath);
+            HtmlDocument doc = new HtmlDocument();
+
+            doc.Load(filePath);
+            //处理img标签
+            var nodes = doc.DocumentNode.SelectNodes("//img");
+            if (nodes == null)
+            {
+                return 0;
+            }
+
+            List<string> imageList = GetDocAllImageLabel(path, nodes);
+            return imageList.Count;
+        }
+
+
 
         /// <summary>
         /// 获取全部
@@ -177,20 +202,23 @@ namespace EvernoteToNotionChrome.Service
                 var fullFilePath = path + @"\" + file.Replace(@"/", @"\");
 
                 Debug.WriteLine(fullFilePath);
-                GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"上传中：{fullFilePath}");
+                //GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"上传中：{fullFilePath}");
                 var result = UploadManager.UploadFile(fullFilePath).Result;
                 if (string.IsNullOrEmpty(result))
                 {
                     continue; //失败
                 }
                 //result = result.Substring(0, result.IndexOf("?Content-Type="));
+
+                Debug.WriteLine("最后上传地址处理前：" + result);
+
                 var index = result.IndexOf("?Content-Type=");
                 if (index == -1)
                 {
                     index = result.IndexOf("?X-Amz");
                 }
 
-                result = result.Substring(0, index);
+                //result = result.Substring(0, index);
                 Debug.WriteLine("最后上传地址：" + result);
                 //替换
                 if (!string.IsNullOrEmpty(result))
