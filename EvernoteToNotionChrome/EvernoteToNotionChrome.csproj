@@ -23,14 +23,14 @@
     <None Remove="icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CefSharp.Wpf.NETCore" Version="94.4.110" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+    <PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.110" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
-    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.3" />
-    <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
-    <PackageReference Include="WPF-UI" Version="2.0.3" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.1" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+    <PackageReference Include="WPF-UI" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icon.ico" />
