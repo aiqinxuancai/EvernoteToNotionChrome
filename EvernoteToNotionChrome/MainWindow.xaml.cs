@@ -223,10 +223,10 @@ namespace EvernoteToNotionChrome
                     var result = await service.ShowSimpleDialogAsync(
                         new SimpleContentDialogCreateOptions()
                         {
-                            Title = "Save your work?",
-                            Content = "aaaa",
-                            PrimaryButtonText = "Save",
-                            SecondaryButtonText = "Don't Save",
+                            Title = "成功",
+                            Content = Status,
+                            //PrimaryButtonText = "Save",
+                            //SecondaryButtonText = "Don't Save",
                             CloseButtonText = "Cancel",
                         }
                     );
@@ -247,10 +247,10 @@ namespace EvernoteToNotionChrome
                     var result = await service.ShowSimpleDialogAsync(
                         new SimpleContentDialogCreateOptions()
                         {
-                            Title = "Save your work?",
-                            Content = "aaaa",
-                            PrimaryButtonText = "Save",
-                            SecondaryButtonText = "Don't Save",
+                            Title = "失败了！",
+                            Content = "目录不存在",
+                            //PrimaryButtonText = "Save",
+                            //SecondaryButtonText = "Don't Save",
                             CloseButtonText = "Cancel",
                         }
                     );
