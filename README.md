@@ -2,7 +2,14 @@
 
 I tried to transfer Evernote to Notion, but all the methods mentioned online failed. So, I wrote this program to upload the images exported from Evernote's HTML to Notion and modify the exported HTML file. The modified HTML file can directly import into Notion and display the images correctly (the images are stored in Notion).
 
-[Quick start(Chinese中文)](https://zhuanlan.zhihu.com/p/403978229)
+[中文](https://zhuanlan.zhihu.com/p/403978229)
+
+## Updates
+<details open>
+<summary><strong>2023-12-26</strong></summary>
+
+**EvernoteToNotionChrome has been released for a long time.** Recently, Notion made changes to the way images are referenced. Now, images must be accompanied by a signature and verified with cookies for login status. This means that the previous method can no longer be used.
+**However, a new method has emerged, which is to convert HTML to Word files.** The Word file will contain all the image information in a single file, making it easy to upload.
 
 ## Quick start
 
