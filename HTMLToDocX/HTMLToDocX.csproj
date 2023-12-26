@@ -7,8 +7,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>icon.ico</ApplicationIcon>
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
+
+    <!--<PropertyGroup>
+	    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    </PropertyGroup>-->
 
   <ItemGroup>
     <None Remove="icon.png" />
