@@ -1,6 +1,8 @@
 # EvernoteToNotionChrome
 
 A tool to import Evernote into Notion, with images stored in Notion.
+![image](https://github.com/aiqinxuancai/EvernoteToNotionChrome/assets/4475018/7ae4f000-fadb-467d-a540-edfc5c0dd1ab)
+
 
 [中文](https://zhuanlan.zhihu.com/p/403978229)
 
@@ -14,7 +16,9 @@ A tool to import Evernote into Notion, with images stored in Notion.
 
 ## Quick start
 
-1.下载Release并解压缩，运行HTMLToDocX.exe
-2.导出Evernote
+1. Download the Release and extract it, then run HTMLToDocX.exe.
+2. Export the notebook from Evernote as HTML multiple files.
+3. Fill in the directory where the exported HTML files are located in HTMLToDocX and click on start.
+4. Import the docx files to Notion.
 
 
