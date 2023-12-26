@@ -1,4 +1,5 @@
 ﻿using Aspose.Words;
+using HTMLToDocX.Services;
 using HTMLToDocX.Utils;
 using System.Diagnostics;
 using System.IO;
@@ -19,6 +20,8 @@ namespace HTMLToDocX
             InitializeComponent();
 
             Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
+
+            GAHelper.Instance.RequestPageView($"启动到主界面{ActionVersion.Version}");
         }
 
         private async void ButtonStart_Click(object sender, RoutedEventArgs e)
