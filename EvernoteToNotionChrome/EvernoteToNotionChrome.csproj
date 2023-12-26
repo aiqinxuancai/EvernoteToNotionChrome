@@ -24,7 +24,9 @@
     <None Remove="icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Aspose.Words" Version="23.12.0" />
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.110" />
+    <PackageReference Include="DocX" Version="2.5.0" />
     <PackageReference Include="Flurl.Http" Version="4.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />

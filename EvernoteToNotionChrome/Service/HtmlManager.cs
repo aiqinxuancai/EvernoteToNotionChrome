@@ -6,8 +6,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 
 namespace EvernoteToNotionChrome.Service
@@ -223,6 +225,9 @@ namespace EvernoteToNotionChrome.Service
                 //替换
                 if (!string.IsNullOrEmpty(result))
                 {
+                    //
+                    //result = result.Replace("?", "%3F").Replace("&", "%26");
+
                     docString = docString.Replace(file, result);
                     Debug.WriteLine("替换地址：" + file + " -> " + result);
                 }

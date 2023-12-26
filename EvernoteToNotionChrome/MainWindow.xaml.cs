@@ -1,4 +1,5 @@
-﻿using CefSharp;
+﻿using Aspose.Words;
+using CefSharp;
 using CefSharp.Internals;
 using EvernoteToNotionChrome.Models;
 using EvernoteToNotionChrome.Service;
@@ -30,6 +31,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
+using Xceed.Document.NET;
+using Xceed.Words.NET;
+
 
 
 
@@ -207,15 +211,38 @@ namespace EvernoteToNotionChrome
                 }
                 //总图片
 
+                var successCount = 0;
                 foreach (var item in files)
                 {
-                    GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"正在处理：{Path.GetFileName(item) }");
-                    HtmlManager.UploadHtmlData(item);
+                    try
+                    {
+                        GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"正在处理：{Path.GetFileName(item)}");
+
+                        var document = new Aspose.Words.Document(item);
+
+                        var newPath = Path.GetDirectoryName(item) + "/DOCX/" + Path.GetFileName(item) + ".docx";
+
+                        // 将 HTML 文件转换为 Word DOCX 格式
+                        document.Save(newPath, SaveFormat.Docx);
+
+                        // 移除部分信息
+                        DocXHelper.ModifyDocument(newPath, "Aspose.Words");
+
+                        // 旧的上传模式
+                        //HtmlManager.UploadHtmlData(item);
+
+                        successCount++;
+                    }
+                    catch (Exception ex) { 
+                    
+                    
+                    }
+
                 }
 
                 await this.Dispatcher.Invoke(async () => 
                 {
-                    Status = @"完成，处理完成的HTML存储在\Replace下";
+                    Status = @"完成，处理完成的HTML存储在\DOCX";
                     //TODO 弹出完成提示，并前往Replace
 
                     var service = App.GetService<IContentDialogService>();
@@ -225,12 +252,15 @@ namespace EvernoteToNotionChrome
                         {
                             Title = "成功",
                             Content = Status,
-                            //PrimaryButtonText = "Save",
-                            //SecondaryButtonText = "Don't Save",
-                            CloseButtonText = "Cancel",
+                            PrimaryButtonText = "打开目录",
+                            CloseButtonText = "关闭",
                         }
                     );
 
+                    if (result == ContentDialogResult.Primary)
+                    {
+                        //打开目录
+                    }
 
                 });
                 
@@ -247,21 +277,16 @@ namespace EvernoteToNotionChrome
                     var result = await service.ShowSimpleDialogAsync(
                         new SimpleContentDialogCreateOptions()
                         {
-                            Title = "失败了！",
-                            Content = "目录不存在",
-                            //PrimaryButtonText = "Save",
-                            //SecondaryButtonText = "Don't Save",
-                            CloseButtonText = "Cancel",
+                            Title = "失败",
+                            Content = "输入的目录不存在",
+                            CloseButtonText = "取消",
                         }
                     );
                 });
                 
             }
         }
+        
 
-        private void HomeButton_Click(object sender, RoutedEventArgs e)
-        {
-            BrowserHelper.OpenUrlBrowser("https://github.com/aiqinxuancai/EvernoteToNotionChrome");
-        }
     }
 }

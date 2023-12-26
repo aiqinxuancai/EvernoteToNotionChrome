@@ -95,7 +95,7 @@
                         VerticalAlignment="Center"
                         AllowDrop="True"
                         Cursor="Hand"
-                        PlaceholderText="粘贴从EverNote导出的HTML所在目录(Pasting Evernote HTML export directory)"
+                        PlaceholderText="EverNote导出HTML文件目录"
                         Text="{Binding Source={x:Static service:AppConfig.Instance}, Path=ConfigData.LastPath, Mode=TwoWay}" />
 
                     <CheckBox
@@ -112,7 +112,8 @@
                         Width="120"
                         Height="40"
                         Click="ButtonStart_Click"
-                        Content="Start" />
+                        Content="开始"
+                        Icon="{ui:SymbolIcon Play24}" />
                 </Grid>
 
             </Border>
