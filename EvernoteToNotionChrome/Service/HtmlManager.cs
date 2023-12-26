@@ -58,8 +58,24 @@ namespace EvernoteToNotionChrome.Service
             List<string> fileList = GetDocAllFileLabel(nodes);
             FixTodoListNode(path, nodes);
 
+            var docString = doc.DocumentNode.OuterHtml;
+
+            Debug.WriteLine($"处理图片");
+            foreach (var item in imageList)
+            {
+         
+                Debug.WriteLine($"处理图片{Path.GetDirectoryName( filePath) + "/" + item}");
+                var imageBytes = File.ReadAllBytes(Path.GetDirectoryName(filePath) + "/" + item);
+
+                string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+                var image = $"data:image/jpeg;base64,{base64ImageRepresentation}";
+
+                docString = docString.Replace(item, image);
+
+            }
+
             //上传所有图片并替换到html文件中
-            var docString = UploadAllImage(imageList, path, doc.DocumentNode.OuterHtml);
+            // var docString = UploadAllImage(imageList, path, doc.DocumentNode.OuterHtml);
 
             //a标签判定为文件类型，不上传
             //docString = UploadAllImage(fileList, path, docString);

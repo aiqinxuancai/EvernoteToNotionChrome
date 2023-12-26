@@ -1,4 +1,4 @@
-﻿using Aspose.Words;
+﻿
 using CefSharp;
 using CefSharp.Internals;
 using EvernoteToNotionChrome.Models;
@@ -31,8 +31,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using Wpf.Ui;
 using Wpf.Ui.Controls;
-using Xceed.Document.NET;
-using Xceed.Words.NET;
+
 
 
 
@@ -218,18 +217,9 @@ namespace EvernoteToNotionChrome
                     {
                         GlobalNotification.Default.Post(GlobalNotification.NotificationOutputLogInfo, $"正在处理：{Path.GetFileName(item)}");
 
-                        var document = new Aspose.Words.Document(item);
-
-                        var newPath = Path.GetDirectoryName(item) + "/DOCX/" + Path.GetFileName(item) + ".docx";
-
-                        // 将 HTML 文件转换为 Word DOCX 格式
-                        document.Save(newPath, SaveFormat.Docx);
-
-                        // 移除部分信息
-                        DocXHelper.ModifyDocument(newPath, "Aspose.Words");
 
                         // 旧的上传模式
-                        //HtmlManager.UploadHtmlData(item);
+                        HtmlManager.UploadHtmlData(item);
 
                         successCount++;
                     }
@@ -242,7 +232,7 @@ namespace EvernoteToNotionChrome
 
                 await this.Dispatcher.Invoke(async () => 
                 {
-                    Status = @"完成，处理完成的HTML存储在\DOCX";
+                    Status = @"完成，处理完成的HTML存储在\Replace";
                     //TODO 弹出完成提示，并前往Replace
 
                     var service = App.GetService<IContentDialogService>();
@@ -260,6 +250,7 @@ namespace EvernoteToNotionChrome
                     if (result == ContentDialogResult.Primary)
                     {
                         //打开目录
+                        Process.Start("explorer.exe", path + "\\Replace");
                     }
 
                 });
