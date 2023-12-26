@@ -42,13 +42,8 @@ namespace EvernoteToNotionChrome
     {
         public static MainWindow Instance { set; get; }
 
-        public bool Overwrite { set; get; } = false;
-
 
         public MainWindowViewModel ViewModel { get; }
-
-
-
 
         private string status;
 
@@ -123,12 +118,13 @@ namespace EvernoteToNotionChrome
         {
             Instance = this;
 
-            Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
+           
 
             InitializeComponent();
             DataContext = this;
-            OverwriteCheckBox.DataContext = this;
-            
+
+            Wpf.Ui.Appearance.SystemThemeWatcher.Watch(this);
+
             BrowserSettings browserSettings = new BrowserSettings();
             browserSettings.Javascript = CefSharp.CefState.Enabled;
             browserSettings.JavascriptAccessClipboard = CefSharp.CefState.Enabled;
@@ -153,6 +149,10 @@ namespace EvernoteToNotionChrome
                 });
 
             });
+
+            _titleBar.Title = @$"EvernoteToNotionChrome {ActionVersion.Version}";
+
+            GAHelper.Instance.RequestPageView($"启动到主界面{ActionVersion.Version}");
         }
 
         private async void ButtonStart_Click(object sender, RoutedEventArgs e)

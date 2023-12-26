@@ -12,6 +12,7 @@
 
     <!-- 如果你的原有项目中有 App.ico 图标，则在此加入 -->
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <UserSecretsId>c1ed6ce1-038d-4de6-aec0-30776e5d9306</UserSecretsId>
 
     <!-- 如果你的原有项目中有自定义的 Main 函数，则在此加入 -->
     <!-- <StartupObject>Walterlv.Whitman.Program</StartupObject> -->
@@ -24,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CefSharp.Wpf.NETCore" Version="120.1.110" />
+    <PackageReference Include="Flurl.Http" Version="4.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json">
@@ -35,6 +37,6 @@
     <PackageReference Include="WPF-UI" Version="3.0.0-preview.13" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icon.ico" />
+    <EmbeddedResource Include="icon.ico" />
   </ItemGroup>
 </Project>

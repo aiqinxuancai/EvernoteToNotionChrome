@@ -28,7 +28,7 @@ namespace EvernoteToNotionChrome.Service
             var path = Path.GetDirectoryName(filePath);
             var savePath = path + @"\Replace\" + Path.GetFileName(filePath);
 
-            if (!MainWindow.Instance.Overwrite && File.Exists(savePath))
+            if (!AppConfig.Instance.ConfigData.Overwrite && File.Exists(savePath))
             {
                 //已经存在 不继续处理
                 return 0;

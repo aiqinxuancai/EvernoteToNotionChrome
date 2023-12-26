@@ -59,7 +59,7 @@ namespace EvernoteToNotionChrome
 
         App() 
         {
-
+            AppConfig.Instance.Init();
             //Add Custom assembly resolver
             AppDomain.CurrentDomain.AssemblyResolve += Resolver;
 
