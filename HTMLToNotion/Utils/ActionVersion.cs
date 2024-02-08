@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Flurl.Http;
 using Newtonsoft.Json.Linq;
 
-namespace HTMLToDocX.Utils
+namespace HTMLToNotion.Utils
 {
     public class ActionVersion
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xceed.Document.NET;
 using Xceed.Words.NET;
 
-namespace HTMLToDocX.Utils
+namespace HTMLToNotion.Utils
 {
     internal class DocXHelper
     {

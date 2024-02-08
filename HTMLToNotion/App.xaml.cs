@@ -1,4 +1,4 @@
-﻿using HTMLToDocX.Services;
+﻿using HTMLToNotion.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,7 +7,7 @@ using System.Data;
 using System.Windows;
 using Wpf.Ui;
 
-namespace HTMLToDocX
+namespace HTMLToNotion
 {
     /// <summary>
     /// Interaction logic for App.xaml

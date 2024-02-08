@@ -1,14 +1,14 @@
 ﻿<ui:FluentWindow
-    x:Class="HTMLToDocX.MainWindow"
+    x:Class="HTMLToNotion.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:HTMLToDocX"
+    xmlns:local="clr-namespace:HTMLToNotion"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:service="clr-namespace:HTMLToDocX.Services"
+    xmlns:service="clr-namespace:HTMLToNotion.Services"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:views="clr-namespace:HTMLToDocX.Views"
-    Title="HTMLToDocX"
+    xmlns:views="clr-namespace:HTMLToNotion.Views"
+    Title="HTMLToNotion"
     Width="550"
     Height="300"
     WindowStartupLocation="CenterScreen"
@@ -26,7 +26,7 @@
 
         <ui:TitleBar
             x:Name="MainTitleBar"
-            Title="HTMLToDocX"
+            Title="HTMLToNotion"
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Icon="pack://application:,,,/icon.png"

@@ -12,7 +12,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace HTMLToDocX.Services
+namespace HTMLToNotion.Services
 {
     //[AddINotifyPropertyChangedInterface]
     public partial class AppConfigData : INotifyPropertyChanged

@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EvernoteToNotionChrome", "EvernoteToNotionChrome\EvernoteToNotionChrome.csproj", "{D7F48F71-0CCD-44ED-B507-3D3980ABC9C3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTMLToDocX", "HTMLToDocX\HTMLToDocX.csproj", "{984C9279-8FA1-4E66-A6FA-8C93ABA3AC78}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HTMLToNotion", "HTMLToNotion\HTMLToNotion.csproj", "{984C9279-8FA1-4E66-A6FA-8C93ABA3AC78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
