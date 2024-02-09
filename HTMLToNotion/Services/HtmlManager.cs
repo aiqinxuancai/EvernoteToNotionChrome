@@ -1,4 +1,5 @@
-﻿using Flurl.Http;
+﻿using Aspose.Words.Drawing;
+using Flurl.Http;
 using HtmlAgilityPack;
 using HTMLToNotion.Services;
 using System;
@@ -9,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace EvernoteToNotion.Services
@@ -29,7 +31,7 @@ namespace EvernoteToNotion.Services
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
-        public static int UploadHtmlData(string filePath, string newFilePath)
+        public static int ModifyHtml(string filePath, string newFilePath)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(filePath);
@@ -55,46 +57,53 @@ namespace EvernoteToNotion.Services
             Debug.WriteLine($"处理图片");
             foreach (var item in nodeList)
             {
+
+
                 byte[] imageBytes = new byte[0];
 
-                if (item.src.StartsWith("http"))
+                try
                 {
-                    //网络图片
-                    imageBytes = item.src.GetBytesAsync().Result;
-
-                }
-                else
-                {
-                    //本地
-                    if (System.IO.Path.IsPathRooted(item.src))
+                    if (item.src.StartsWith("http"))
                     {
-                        imageBytes = File.ReadAllBytes(item.src);
+                        //网络图片
+                        imageBytes = item.src.GetBytesAsync().Result;
+
                     }
                     else
                     {
-                        imageBytes = File.ReadAllBytes(System.IO.Path.GetDirectoryName(filePath) + "/" + item.src);
+                        //本地
+                        if (System.IO.Path.IsPathRooted(item.src))
+                        {
+                            imageBytes = File.ReadAllBytes(item.src);
+                        }
+                        else
+                        {
+                            imageBytes = File.ReadAllBytes(System.IO.Path.GetDirectoryName(filePath) + "/" + item.src);
+                        }
                     }
+
+
+                    if (imageBytes.Length > 0)
+                    {
+                        //写出
+                        string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+                        var image = $"data:image/jpeg;base64,{base64ImageRepresentation}";
+
+                        Bitmap bitmap = new Bitmap(new MemoryStream(imageBytes));
+
+                        item.node.SetAttributeValue("src", image);
+                        item.node.SetAttributeValue("style", $"width: {bitmap.Width}px; height: {bitmap.Height}px;");
+                    }
+                } 
+                catch (Exception ex)
+                {
+                
                 }
 
-                //TODO
-
-                //Debug.WriteLine($"处理图片{Path.GetDirectoryName(filePath) + "/" + item}");
-                //var imageBytes = File.ReadAllBytes(Path.GetDirectoryName(filePath) + "/" + item);
-
-                //string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
-                //var image = $"data:image/jpeg;base64,{base64ImageRepresentation}";
-
-                //docString = docString.Replace(item, image);
-
+                
             }
 
-            //上传所有图片并替换到html文件中
-            // var docString = UploadAllImage(imageList, path, doc.DocumentNode.OuterHtml);
-
-            //a标签判定为文件类型，不上传
-            //docString = UploadAllImage(fileList, path, docString);
-
-            File.WriteAllText(newFilePath, docString);
+            File.WriteAllText(newFilePath, doc.DocumentNode.OuterHtml);
             return nodeList.Count;
 
         }

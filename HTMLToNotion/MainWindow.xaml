@@ -8,11 +8,15 @@
     xmlns:service="clr-namespace:HTMLToNotion.Services"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:views="clr-namespace:HTMLToNotion.Views"
+    xmlns:conv="clr-namespace:HTMLToNotion.Utils"
     Title="HTMLToNotion"
     Width="550"
     Height="300"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <Window.Resources>
+        <conv:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="941*" />
@@ -85,10 +89,22 @@
                             Margin="0,10,0,0"
                             FontWeight="Bold"
                             Text="选项" />
-                        <CheckBox
-                            x:Name="OverwriteCheckBox"
-                            Content="覆盖文件"
-                            IsChecked="{Binding Source={x:Static service:AppConfig.Instance}, Path=ConfigData.Overwrite, Mode=TwoWay}" />
+
+                        <StackPanel>
+                            <RadioButton
+                            x:Name="DocxCheckBox"
+                            Content="导出为DOC"
+                            IsChecked="{Binding Source={x:Static service:AppConfig.Instance}, Path=ConfigData.OutputDocx, Mode=TwoWay}" />
+
+                            <RadioButton
+                            x:Name="HtmlCheckBox"
+                            Content="导出为HTML"
+                            IsChecked="{Binding Source={x:Static service:AppConfig.Instance}, Path=ConfigData.OutputDocx, Converter={StaticResource InverseBooleanConverter}, Mode=TwoWay}" />
+                            
+                        </StackPanel>
+                        
+
+
 
                         <ui:Button
                             x:Name="ButtonStart"

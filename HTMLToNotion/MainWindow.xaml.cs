@@ -36,7 +36,15 @@ namespace HTMLToNotion
 
 
             await Task.Run(() => {
-                StartDocXWithPath(path);
+                if (AppConfig.Instance.ConfigData.OutputDocx)
+                {
+                    StartDocXWithPath(path);
+                } 
+                else
+                {
+                    StartHTMLWithPath(path);
+                }
+                
             });
 
 

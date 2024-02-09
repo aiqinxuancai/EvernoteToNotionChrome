@@ -24,7 +24,8 @@ namespace HTMLToNotion.Services
 
         public string LastPath { get; set; } = string.Empty;
 
-        public bool Overwrite { get; set; }
+
+        public bool OutputDocx { get; set; }
 
     }
 
