@@ -7,11 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace EvernoteToNotion.Services
 {
@@ -22,12 +17,16 @@ namespace EvernoteToNotion.Services
         public string src;
     }
 
-
+    internal class HtmlFileModel
+    {
+        public HtmlNode node;
+        public string src;
+    }
 
     internal class HtmlManager
     {
         /// <summary>
-        /// 返回图片总数
+        /// 处理HTML文件
         /// </summary>
         /// <param name="filePath"></param>
         /// <returns></returns>
@@ -35,6 +34,12 @@ namespace EvernoteToNotion.Services
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(filePath);
+
+
+            if (!Directory.Exists(Path.GetDirectoryName(newFilePath)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(newFilePath));
+            }
 
             //处理img标签
             var nodes = doc.DocumentNode.SelectNodes("//img");
@@ -48,44 +53,39 @@ namespace EvernoteToNotion.Services
             Debug.WriteLine($"找到图片{nodes.Count}个");
 
             List<HtmlImageModel> nodeList = GetDocAllImageLabel(nodes);
-            List<string> fileList = GetDocAllFileLabel(nodes);
-
-            //FixTodoListNode(path, nodes);
-
+           
             var docString = doc.DocumentNode.OuterHtml;
 
-            Debug.WriteLine($"处理图片");
             foreach (var item in nodeList)
             {
-
+                Debug.WriteLine($"处理图片 {item.src}");
 
                 byte[] imageBytes = new byte[0];
 
                 try
                 {
-                    if (item.src.StartsWith("http"))
+                    if (item.src.StartsWith("http")) //网络图片则下载
                     {
-                        //网络图片
                         imageBytes = item.src.GetBytesAsync().Result;
-
                     }
                     else
                     {
-                        //本地
                         if (System.IO.Path.IsPathRooted(item.src))
                         {
                             imageBytes = File.ReadAllBytes(item.src);
                         }
                         else
                         {
-                            imageBytes = File.ReadAllBytes(System.IO.Path.GetDirectoryName(filePath) + "/" + item.src);
+
+                            var path = Path.GetFullPath(Path.GetDirectoryName(filePath) + "/" + item.src);
+
+                            imageBytes = File.ReadAllBytes(path);
                         }
                     }
 
 
                     if (imageBytes.Length > 0)
                     {
-                        //写出
                         string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
                         var image = $"data:image/jpeg;base64,{base64ImageRepresentation}";
 
@@ -101,6 +101,54 @@ namespace EvernoteToNotion.Services
                 }
 
                 
+            }
+
+            List<HtmlFileModel> fileList = GetDocAllFileLabel(nodes);
+   
+            foreach (var item in fileList)
+            {
+                Debug.WriteLine($"处理文件 {item.src}");
+
+                byte[] imageBytes = new byte[0];
+
+                try
+                {
+                    if (item.src.StartsWith("http")) //网络图片则下载
+                    {
+                        imageBytes = item.src.GetBytesAsync().Result;
+                    }
+                    else
+                    {
+                        if (System.IO.Path.IsPathRooted(item.src))
+                        {
+                            imageBytes = File.ReadAllBytes(item.src);
+                        }
+                        else
+                        {
+
+                            var path = Path.GetFullPath(Path.GetDirectoryName(filePath) + "/" + item.src);
+
+                            imageBytes = File.ReadAllBytes(path);
+                        }
+                    }
+
+
+                    if (imageBytes.Length > 0)
+                    {
+                        string base64ImageRepresentation = Convert.ToBase64String(imageBytes);
+                        var file = $"data:application/octet-stream;base64,{base64ImageRepresentation}";
+
+                      
+                        item.node.SetAttributeValue("href", file);
+                        item.node.SetAttributeValue("download", Path.GetFileName(item.src));
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                }
+
+
             }
 
             File.WriteAllText(newFilePath, doc.DocumentNode.OuterHtml);
@@ -124,21 +172,10 @@ namespace EvernoteToNotion.Services
                     continue;
                 }
 
-                if (link.ParentNode.Name == "a") //上级node是a标签，文件类型，不按照图片处理;
-                {
-                    continue;
-                }
-                else if (src.Value.Contains("en_todo"))
-                {
-                    continue;
-                }
-                else
-                {
-                    HtmlImageModel model = new HtmlImageModel();
-                    model.src = src.Value;
-                    model.node = link;
-                    nodeList.Add(model);
-                }
+                HtmlImageModel model = new HtmlImageModel();
+                model.src = src.Value;
+                model.node = link;
+                nodeList.Add(model);
             }
             return nodeList;
         }
@@ -148,9 +185,10 @@ namespace EvernoteToNotion.Services
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static List<string> GetDocAllFileLabel(HtmlNodeCollection nodes)
+        private static List<HtmlFileModel> GetDocAllFileLabel(HtmlNodeCollection nodes)
         {
-            List<string> fileList = new List<string>();
+            List<HtmlFileModel> nodeList = new List<HtmlFileModel>();
+
             foreach (HtmlNode link in nodes)
             {
                 HtmlAttribute src = link.Attributes["src"];
@@ -163,10 +201,15 @@ namespace EvernoteToNotion.Services
                 {
                     HtmlNode parentNode = link.ParentNode;
                     string href = parentNode.Attributes["href"].Value; //文件路径
-                    fileList.Add(href);
+
+
+                    HtmlFileModel model = new HtmlFileModel();
+                    model.src = href;
+                    model.node = parentNode;
+                    nodeList.Add(model);
                 }
             }
-            return fileList;
+            return nodeList;
         }
 
         /// <summary>

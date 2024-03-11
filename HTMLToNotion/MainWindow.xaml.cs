@@ -1,4 +1,5 @@
 ﻿using Aspose.Words;
+using EvernoteToNotion.Services;
 using HTMLToNotion.Services;
 using HTMLToNotion.Utils;
 using System.Diagnostics;
@@ -163,6 +164,9 @@ namespace HTMLToNotion
 
 
                         //TODO 
+                        var newPath = Path.Combine(docxPath, Path.GetFileName(item) + ".html");
+
+                        HtmlManager.ModifyHtml(item, newPath);
 
                         successCount++;
                     }
