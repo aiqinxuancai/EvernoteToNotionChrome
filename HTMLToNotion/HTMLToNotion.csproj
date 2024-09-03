@@ -30,7 +30,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
-    <PackageReference Include="WPF-UI" Version="3.0.0" />
+    <PackageReference Include="WPF-UI" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>
