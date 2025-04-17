@@ -15,7 +15,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
       - name: Clean
         run: dotnet clean $env:GITHUB_WORKSPACE\HTMLToNotion\HTMLToNotion.csproj --configuration Release && dotnet nuget locals all --clear
       - name: Restore dependencies
@@ -28,9 +28,9 @@ jobs:
         run:  dotnet publish -c Release --runtime win-x64 --self-contained=true
       - run: powershell curl https://github.com/aiqinxuancai/DotNetDllPathPatcherWPF/releases/download/v0.0.15/DotNetDllPathPatcherCMD.zip -o DotNetDllPathPatcherCMD.zip
       - run: powershell Expand-Archive -Path .\DotNetDllPathPatcherCMD.zip -DestinationPath .\DotNetDllPathPatcherCMD
-      - run: powershell .\DotNetDllPathPatcherCMD\publish\DotNetDllPathPatcherCMD.exe $env:GITHUB_WORKSPACE\HTMLToDocX\bin\Release\net8.0-windows\win-x64\publish\HTMLToNotion.exe
+      - run: powershell .\DotNetDllPathPatcherCMD\publish\DotNetDllPathPatcherCMD.exe $env:GITHUB_WORKSPACE\HTMLToNotion\bin\Release\net9.0-windows\win-x64\publish\HTMLToNotion.exe
       - name: Compress
-        run: powershell Compress-Archive -Path $env:GITHUB_WORKSPACE\HTMLToNotion\bin\Release\net8.0-windows\win-x64\publish -DestinationPath .\HTMLToNotion.zip
+        run: powershell Compress-Archive -Path $env:GITHUB_WORKSPACE\HTMLToNotion\bin\Release\net9.0-windows\win-x64\publish -DestinationPath .\HTMLToNotion.zip
       - name: Create a Release
         uses: ncipollo/release-action@v1
         with:

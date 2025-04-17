@@ -2,17 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <Platforms>AnyCPU</Platforms>
   </PropertyGroup>
-
-    <!--<PropertyGroup>
-	    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
-    </PropertyGroup>-->
 
   <ItemGroup>
     <None Remove="icon.png" />
@@ -23,14 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DocX" Version="2.5.0" />
-	<PackageReference Include="Aspose.Words" Version="23.12.0" />
+    <PackageReference Include="DocX" Version="4.0.25105.5786" />
+	<PackageReference Include="Aspose.Words" Version="25.4.0" />
     <PackageReference Include="Flurl.Http" Version="4.0.2" />
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.57" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.12.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
-    <PackageReference Include="WPF-UI" Version="3.0.5" />
+    <PackageReference Include="System.Drawing.Common" Version="9.0.4" />
+    <PackageReference Include="WPF-UI" Version="4.0.2" />
   </ItemGroup>
 
   <ItemGroup>
