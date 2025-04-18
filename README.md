@@ -1,4 +1,4 @@
-# EvernoteToNotionChrome
+# HTMLToNotion
 
 本项目解决使用HTML导入Notion时，HTML中的图片是URL引用而非存储到Notion的问题。
 
